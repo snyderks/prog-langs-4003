@@ -89,7 +89,7 @@ class SalesManager extends SalesPerson implements ManagerInterface {
 	
    double computePay() {
       System.out.println("SalesManager: " + name + " " +
-			 super.computePay()+managerComputePay());
+			 (super.computePay()+managerComputePay()));
       return super.computePay() + managerComputePay();
    }
 
