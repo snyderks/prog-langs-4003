@@ -19,16 +19,46 @@ class Monitor {
    // and asks Girl to confirm.  Neither Boy nor Girl can give time to their
    // confirm call because they are stuck in ping.  Hence the handshake 
    // cannot be completed.
-   public synchronized void ping (Monitor p) {
-      synchronized (p) {
-          System.out.println(this.name + " (ping): pinging " + p.getName());
-          p.confirm(this);
-      }
+   public synchronized void ping(Monitor p) {
+      // Releases the thread to the other Monitor
+      p.release(this);
+      
+      // Wait for a release (the thread that starts second
+      // will release the first one)
+      try { wait(); } catch (Exception ex) { }
+      
+      System.out.println(this.name + " (ping): pinging " + p.getName());
+      
+      // Now let the second thread go
+      p.release(this);
+      
+      // First thread will wait for release
+      try { wait(); } catch (Exception ex) { }
+      
+      // Second thread confirms and then releases the first one
+      p.confirm(this);
+      
+      p.release(this);
+      
+      // Second thread waits
+      try { wait(); } catch (Exception ex) { }
+      
+      // First thread returns confirmation
       System.out.println(this.name + " (ping): got confirmation");
+      
+      // First thread releases the second one
+      p.release(this);
    }
 				
-   public synchronized void confirm (Monitor p) {
+   public synchronized void confirm(Monitor p) {
       System.out.println(this.name+" (confirm): confirm to "+p.getName());
+   }
+   
+   // Release needs to have a lock on the notify call so that
+   // only one thread can release, otherwise both will release
+   // at the same time and then both will wait.
+   public synchronized void release(Monitor p) {
+      notify();
    }
 }
 
