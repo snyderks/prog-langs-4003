@@ -1,0 +1,4 @@
+Lab 03
+Completed by Kristian Snyder
+
+Note: some classes have been modified to accomodate the double values returned by the producers. These classes should be included in addition to the CollectorStream class. 

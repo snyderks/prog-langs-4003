@@ -1,3 +1,7 @@
+
+// CollectorStream.java
+// Created by Kristian Snyder
+
 import java.applet.*;
 import javax.swing.*;
 import java.awt.*;
